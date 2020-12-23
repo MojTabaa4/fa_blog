@@ -1,0 +1,57 @@
+{% extends 'blog/base.html' %}
+{% load comment_tags %}
+
+{% block title %}
+    | {{ object.title }}
+{% endblock %}
+
+{% block main %}
+
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('{{ object.thumbnail.url }}')">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <div class="site-heading">
+                        <h1>{{ object.title }}</h1>
+                        <time>{{ object.jpublish }}</time>
+                        <br>
+                        {% if article.is_special %}
+                            <span class="badge badge-danger" style="font-size: 17px">مقاله ویژه</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Post Content -->
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto text-justify">
+                    {% if object.is_special %}
+                        {% if user.is_authenticated and user.is_special_user or user == object.author or user.is_superuser %}
+                            {{ object.description|safe }}
+                        {% else %}
+                            {{ article.description|striptags|truncatechars:50 }}
+                            <p style="font-size: 20px" class="alert alert-warning">این مقاله ویژه است</p>
+                            <p class="alert-link">و برای مشاهده کامل آن باید <a href="#">
+                                اشتراک ویژه
+                            </a>تهیه بکنید</p>
+                        {% endif %}
+                    {% else %}
+                        {{ object.description|safe }}
+                    {% endif %}
+
+                    {% render_comments object request %}
+                    {% include_static_jquery %}
+                    {% include_bootstrap %}
+                </div>
+
+            </div>
+        </div>
+    </article>
+
+{% endblock %}

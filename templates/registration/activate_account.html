@@ -1,0 +1,5 @@
+{% autoescape off %}
+    سلام کاربر{{ user.username }},
+    <a href="">لطفا برای فعال سازی حساب کاربری خود وارد لینک زیر شوید</a>
+    http://{{ domain }}{% url 'activate' uidb64=uid token=token %}
+{% endautoescape %}
